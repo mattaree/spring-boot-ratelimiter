@@ -1,0 +1,27 @@
+# External-Book-Service
+# PostgreSQL version used : PostgreSQL 15.3, compiled by Visual C++ build 1914, 64-bit
+server:
+  port: 8082
+
+spring:
+  application:
+    name: BOOKSAUTHOR-SERVICE
+  datasource:
+#    url: jdbc:mysql://localhost:3306/sys
+    url: jdbc:postgresql://localhost:5432/gutendex
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+#books:
+#  service:
+#    name: BOOKSAUTHOR-SERVICE
