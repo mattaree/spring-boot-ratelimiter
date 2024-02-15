@@ -1,0 +1,46 @@
+# For implementing logging
+logging:
+  level:
+    #root: DEBUG                                                #<-- this prints verbose logs in file and on console
+    #org.springframework.security.web.FilterChainProxy: DEBUG   # <-- will display all filters automatically configured by Spring security and are being executed on each incoming Request
+    org.springframework.web: DEBUG                             # <-- this prints logs from Spring's Framework
+    com.atm.feign.listener: DEBUG                                  # <-- this prints logs from the application classpath
+
+# Fiegn Listener
+server:
+  port: 8081
+
+spring:
+  application:
+    name: REST-FCRT-CLIENTS
+
+books:
+  service:
+#    name: BOOKSAUTHOR-SERVICE
+    url: http://localhost:8082/api/v1.0/fetch
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    ratelimiters:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+resilience4j.ratelimiter:
+  configs:
+    default:     # Showcase of default template that can be reused across multiple rate limiter instances.
+      limitForPeriod: 2    # max number of requests allowed within a specific time period
+      limitRefreshPeriod: 15s  # duration of the specific time period, which means, 4 request in 10 seconds.
+      timeoutDuration: 5s # timeout duration of a request, if it exceeds 5s then it means it takes too long and might trigger fallback behavior or an exception. setting it 5s means it fails after 5 seconds.
+      registerHealthIndicator: true # this is a health indicator
+      eventConsumerBufferSize: 100 # Rate limiter events are a successful or rejected requests. Should be configured with large numbers to avoid loss of events during peak traffic.
+  instances:
+    getBookById:
+      baseConfig: default
